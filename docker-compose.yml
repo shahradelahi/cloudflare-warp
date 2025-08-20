@@ -1,0 +1,13 @@
+services:
+  cloudflare-warp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: ghcr.io/shahradelahi/cloudflare-warp:latest
+    container_name: cloudflare-warp
+    restart: unless-stopped
+    volumes:
+      - ./warp-data:/var/lib/cloudflare-warp
+    ports:
+      - "4000:4000"
+    command: --socks-addr 0.0.0.0:4000

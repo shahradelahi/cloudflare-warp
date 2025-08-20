@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/shahradelahi/cloudflare-warp/discussions
+    about: Ask questions and get help on GitHub Discussions

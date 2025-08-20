@@ -1,0 +1,8 @@
+.github/
+.gitignore
+.golangci.yaml
+
+# Other
+docs/
+build/
+tests/

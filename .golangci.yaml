@@ -1,0 +1,21 @@
+linters:
+  disable-all: true
+  enable:
+    - gci
+    - gofumpt
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - unconvert
+    - unused
+    - usestdlibvars
+
+linters-settings:
+  gci:
+    custom-order: true
+    sections:
+      - standard
+      - default
+      - prefix(github.com/shahradelahi/cloudflare-warp)
