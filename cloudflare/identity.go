@@ -9,7 +9,6 @@ import (
 
 	"github.com/shahradelahi/cloudflare-warp/cloudflare/crypto"
 	"github.com/shahradelahi/cloudflare-warp/cloudflare/model"
-
 	"github.com/shahradelahi/cloudflare-warp/log"
 )
 

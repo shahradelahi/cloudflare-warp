@@ -3,8 +3,9 @@ package cmd
 import (
 	"log"
 
-	"github.com/shahradelahi/cloudflare-warp/cloudflare"
 	"github.com/spf13/cobra"
+
+	"github.com/shahradelahi/cloudflare-warp/cloudflare"
 )
 
 var statusShortMsg = "Prints the status of the current Cloudflare Warp device"

@@ -149,6 +149,7 @@ func (e *Engine) runWarp(endpoint string) error {
 // startProxy starts the proxy servers and waits for the context to be done.
 func (e *Engine) startProxy(ctx context.Context, conf *wiresocks.Configuration, opts *wiresocks.ProxyConfig) error {
 	ctx, cancel := context.WithCancelCause(ctx)
+	defer cancel(nil)
 
 	ws, err := wiresocks.NewWireSocks(
 		wiresocks.WithContext(ctx),

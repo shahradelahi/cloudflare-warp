@@ -11,10 +11,9 @@ import (
 
 func FormatMessage(shortMessage string, longMessage string) string {
 	if longMessage != "" {
-		if strings.HasPrefix(longMessage, "\n") {
-			longMessage = longMessage[1:]
-		}
-		longMessage = strings.Replace(longMessage, "\n", " ", -1)
+		longMessage = strings.TrimPrefix(longMessage, "\n")
+		longMessage = strings.ReplaceAll(longMessage, "\n", " ")
+
 	}
 	if shortMessage != "" && longMessage != "" {
 		return shortMessage + ". " + longMessage

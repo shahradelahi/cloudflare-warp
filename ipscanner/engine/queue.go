@@ -5,10 +5,10 @@ import (
 	"sync"
 	"time"
 
+	"go.uber.org/zap"
+
 	"github.com/shahradelahi/cloudflare-warp/ipscanner/model"
 	"github.com/shahradelahi/cloudflare-warp/log"
-
-	"go.uber.org/zap"
 )
 
 type IPQueue struct {

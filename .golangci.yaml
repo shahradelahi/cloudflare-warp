@@ -1,9 +1,12 @@
+version: "2"
+
+run:
+  timeout: 5m
+
 linters:
-  disable-all: true
+  default: none
   enable:
-    - gci
-    - gofumpt
-    - gosimple
+    - cyclop
     - govet
     - ineffassign
     - misspell
@@ -12,10 +15,26 @@ linters:
     - unused
     - usestdlibvars
 
-linters-settings:
-  gci:
-    custom-order: true
-    sections:
-      - standard
-      - default
-      - prefix(github.com/shahradelahi/cloudflare-warp)
+  settings:
+    cyclop:
+      max-complexity: 20
+      package-average: 10.0
+
+  exclusions:
+    rules:
+      - path: _test\.go$
+        linters:
+          - cyclop
+          - errcheck
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+  settings:
+    gci:
+      custom-order: true
+      sections:
+        - standard
+        - default
+        - prefix(github.com/shahradelahi/cloudflare-warp)

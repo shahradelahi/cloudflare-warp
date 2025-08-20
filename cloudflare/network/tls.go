@@ -7,16 +7,13 @@ import (
 	"net/netip"
 	"time"
 
+	"github.com/avast/retry-go"
+	"github.com/noql-net/certpool"
+	tls "github.com/refraction-networking/utls"
 	"go.uber.org/zap"
 
 	"github.com/shahradelahi/cloudflare-warp/log"
-
-	"github.com/avast/retry-go"
-
 	"github.com/shahradelahi/cloudflare-warp/utils"
-
-	"github.com/noql-net/certpool"
-	tls "github.com/refraction-networking/utls"
 )
 
 // Dialer is a struct that holds various options for custom dialing.
