@@ -1,12 +1,23 @@
+ARG ALPINE_VERSION=latest
+
+FROM --platform=$BUILDPLATFORM alpine:${ALPINE_VERSION} AS alpine
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ >/etc/timezone
+RUN apk update \
+ && apk add -U --no-cache \
+  ca-certificates \
+ && rm -rf /var/cache/apk/*
+
 FROM golang:alpine AS builder
 
 WORKDIR /src
 COPY . /src
 
-RUN apk add --update --no-cache make git \
+ENV GOCACHE=/gocache
+RUN --mount=type=cache,target="/gocache" apk add --update --no-cache make git \
     && make cloudflare-warp
 
-FROM alpine:latest
+FROM alpine
 LABEL org.opencontainers.image.source="https://github.com/shahradelahi/cloudflare-warp"
 
 # Create and set permissions for the data directory

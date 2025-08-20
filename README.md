@@ -2,11 +2,19 @@
 
 [![GitHub Workflow][1]](https://github.com/shahradelahi/cloudflare-warp/actions)
 [![Go Version][2]](https://img.shields.io/github/go-mod/go-version/shahradelahi/cloudflare-warp?logo=go)
-[![Go Report][3]](https://goreportcard.com/badge/github.com/shahradelahi/cloudflare-warp)
+[![Go Report Card][3]](https://goreportcard.com/report/github.com/shahradelahi/cloudflare-warp)
 [![Maintainability][4]](https://api.codeclimate.com/v1/badges/b5b30239174fc6603aca/maintainability)
 [![GitHub License][5]](https://img.shields.io/github/license/shahradelahi/cloudflare-warp)
 [![Docker Pulls][6]](https://hub.docker.com/r/shahradelahi/cloudflare-warp)
 [![Releases][7]](https://github.com/shahradelahi/cloudflare-warp/releases)
+
+[1]: https://img.shields.io/github/actions/workflow/status/shahradelahi/cloudflare-warp/docker.yml?logo=github
+[2]: https://img.shields.io/github/go-mod/go-version/shahradelahi/cloudflare-warp?logo=go
+[3]: https://goreportcard.com/badge/github.com/shahradelahi/cloudflare-warp
+[4]: https://qlty.sh/gh/shahradelahi/projects/cloudflare-warp/maintainability.svg
+[5]: https://img.shields.io/github/license/shahradelahi/cloudflare-warp
+[6]: https://img.shields.io/docker/pulls/shahradelahi/cloudflare-warp?logo=docker
+[7]: https://img.shields.io/github/v/release/shahradelahi/cloudflare-warp?logo=smartthings
 
 ## Table of Contents
 
@@ -249,11 +257,3 @@ This tool is an independent open-source project and is provided "as is" without 
     <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=shahradelahi/cloudflare-warp&type=Date" />
   </picture>
 </a>
-
-[1]: https://img.shields.io/github/actions/workflow/status/shahradelahi/cloudflare-warp/docker.yml?logo=github
-[2]: https://img.shields.io/github/go-mod/go-version/shahradelahi/cloudflare-warp?logo=go
-[3]: https://goreportcard.com/badge/github.com/shahradelahi/cloudflare-warp
-[4]: https://api.codeclimate.com/v1/badges/b5b30239174fc6603aca/maintainability
-[5]: https://img.shields.io/github/license/shahradelahi/cloudflare-warp
-[6]: https://img.shields.io/docker/pulls/shahradelahi/cloudflare-warp?logo=docker
-[7]: https://img.shields.io/github/v/release/shahradelahi/cloudflare-warp?logo=smartthings

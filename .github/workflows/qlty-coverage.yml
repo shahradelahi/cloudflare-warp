@@ -1,0 +1,34 @@
+name: Qlty Coverage
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  upload-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Generate coverage report
+        run: bundle exec rake
+        env:
+          COVERAGE: true
+          ISOLATED: true
+
+      - uses: qltysh/qlty-action/coverage@v2
+        with:
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: coverage/.resultset.json
