@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -41,6 +43,9 @@ func runUpdate() error {
 
 	identity, err := cloudflare.LoadIdentity()
 	if err != nil {
+		if os.IsNotExist(err) || errors.Is(err, errors.New("identity contains 0 peers")) {
+			return fmt.Errorf("WARP identity not found. Please run 'warp generate' to create one")
+		}
 		return err
 	}
 
@@ -60,7 +65,7 @@ func runUpdate() error {
 	// Update license if provided
 	if license != "" {
 		// Generate configs
-		_, err = cloudflare.CreateOrUpdateIdentity(license)
+		identity, err = cloudflare.CreateOrUpdateIdentity(license)
 		if err != nil {
 			log.Fatalw("Failed to generate primary identity", zap.Error(err))
 		}
