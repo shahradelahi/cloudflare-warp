@@ -41,7 +41,7 @@ func CreateOrUpdateIdentity(license string) (*model.Identity, error) {
 		identity.Account = iAcc
 	}
 
-	return &identity, nil
+	return identity, nil
 }
 
 func LoadOrCreateIdentity() (*model.Identity, error) {
@@ -58,34 +58,34 @@ func LoadOrCreateIdentity() (*model.Identity, error) {
 	return identity, nil
 }
 
-func LoadIdentity() (model.Identity, error) {
+func LoadIdentity() (*model.Identity, error) {
 	regPath := model.GetRegPath()
 	confPath := model.GetConfPath()
 
 	if _, err := os.Stat(regPath); os.IsNotExist(err) {
-		return model.Identity{}, err
+		return nil, err
 	}
 	if _, err := os.Stat(confPath); os.IsNotExist(err) {
-		return model.Identity{}, err
+		return nil, err
 	}
 
 	regBytes, err := os.ReadFile(regPath)
 	if err != nil {
-		return model.Identity{}, err
+		return nil, err
 	}
 	confBytes, err := os.ReadFile(confPath)
 	if err != nil {
-		return model.Identity{}, err
+		return nil, err
 	}
 
 	var regFile model.RegFile
 	if err := json.Unmarshal(regBytes, &regFile); err != nil {
-		return model.Identity{}, err
+		return nil, err
 	}
 
 	var confFile model.ConfFile
 	if err := json.Unmarshal(confBytes, &confFile); err != nil {
-		return model.Identity{}, err
+		return nil, err
 	}
 
 	identity := model.Identity{
@@ -98,10 +98,10 @@ func LoadIdentity() (model.Identity, error) {
 	}
 
 	if len(identity.Config.Peers) < 1 {
-		return model.Identity{}, errors.New("identity contains 0 peers")
+		return nil, errors.New("identity contains 0 peers")
 	}
 
-	return identity, nil
+	return &identity, nil
 }
 
 func CreateIdentity(warpAPI *WarpAPI, license string) (model.Identity, error) {

@@ -21,7 +21,7 @@ var GenerateCmd = &cobra.Command{
 func init() {}
 
 func generate(cmd *cobra.Command, args []string) {
-	ident, err := cloudflare.CreateOrUpdateIdentity("")
+	ident, err := cloudflare.LoadOrCreateIdentity()
 	if err != nil {
 		log.Fatalw("Failed to generate primary identity", zap.Error(err))
 	}

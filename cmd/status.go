@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"errors"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -24,6 +27,9 @@ var StatusCmd = &cobra.Command{
 func status() error {
 	identity, err := cloudflare.LoadIdentity()
 	if err != nil {
+		if os.IsNotExist(err) || errors.Is(err, errors.New("identity contains 0 peers")) {
+			return fmt.Errorf("WARP identity not found. Please run 'warp generate' to create one")
+		}
 		return err
 	}
 
