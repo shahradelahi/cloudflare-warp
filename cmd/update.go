@@ -54,7 +54,7 @@ func runUpdate() error {
 
 	// Update device name if provided
 	if name != "" {
-		_, err = warpAPI.UpdateBoundDevice(identity.Token, identity.ID, identity.ID, name, true)
+		_, err = warpAPI.UpdateSourceDevice(identity.Token, identity.ID, map[string]interface{}{"name": name})
 		if err != nil {
 			return fmt.Errorf("failed to update device name: %w", err)
 		}

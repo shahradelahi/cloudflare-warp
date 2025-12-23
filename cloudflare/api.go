@@ -321,7 +321,7 @@ func (w *WarpAPI) UpdateAccount(authToken, deviceID, license string) (model.Iden
 }
 
 func (w *WarpAPI) UpdateBoundDevice(authToken, deviceID, otherDeviceID, name string, active bool) (model.IdentityDevice, error) {
-	reqUrl := fmt.Sprintf("%s/reg/%s/account/reg/%s", apiBase, deviceID, otherDeviceID)
+	reqUrl := fmt.Sprintf("%s/reg/%s/account/devices/%s", apiBase, deviceID, otherDeviceID)
 	method := "PATCH"
 
 	data := map[string]interface{}{
@@ -370,11 +370,11 @@ func (w *WarpAPI) UpdateBoundDevice(authToken, deviceID, otherDeviceID, name str
 	return rspData, nil
 }
 
-func (w *WarpAPI) UpdateSourceDevice(authToken, deviceID, publicKey string) (model.Identity, error) {
+func (w *WarpAPI) UpdateSourceDevice(authToken, deviceID string, data map[string]interface{}) (model.Identity, error) {
 	reqUrl := fmt.Sprintf("%s/reg/%s", apiBase, deviceID)
 	method := "PATCH"
 
-	jsonBody, err := json.Marshal(map[string]interface{}{"key": publicKey})
+	jsonBody, err := json.Marshal(data)
 	if err != nil {
 		return model.Identity{}, err
 	}
