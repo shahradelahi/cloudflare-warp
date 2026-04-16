@@ -58,16 +58,8 @@ github.com/rodaine/table v1.3.0/go.mod h1:47zRsHar4zw0jgxGxL9YtFfs7EGN6B/TaS+/Dm
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/sagernet/sing v0.7.5 h1:gNMwZCLPqR+4e0g6dwi0sSsrvOmoMjpZgqxKsuJZatc=
-github.com/sagernet/sing v0.7.5/go.mod h1:ARkL0gM13/Iv5VCZmci/NuoOlePoIsW0m7BWfln/Hak=
 github.com/sagikazarmark/locafero v0.7.0 h1:5MqpDsTGNDhY8sGp0Aowyf0qKsPrhewaLSsFaodPcyo=
 github.com/sagikazarmark/locafero v0.7.0/go.mod h1:2za3Cg5rMaTMoG/2Ulr9AwtFaIppKXTRYnozin4aB5k=
-github.com/shahradelahi/wiresocks v0.0.0-20250814100958-4c0b16594e4d h1:LQJoupBK6OI6nQeFY+8Bu8D07XrK7ETdK6Rqw+TKrl4=
-github.com/shahradelahi/wiresocks v0.0.0-20250814100958-4c0b16594e4d/go.mod h1:VA5Kh0NKeizJUFXo8hw72mWTQmJNviRB1SrgTqquVNc=
-github.com/shahradelahi/wiresocks v0.0.0-20250814224151-c57fc1e4137d h1:Qjg9/DlSSZ2FkepCiv8iV+kYR8SCd1/lGTNbdi5Ikck=
-github.com/shahradelahi/wiresocks v0.0.0-20250814224151-c57fc1e4137d/go.mod h1:VA5Kh0NKeizJUFXo8hw72mWTQmJNviRB1SrgTqquVNc=
-github.com/shahradelahi/wiresocks v0.0.0-20250815002029-d2ed70aae079 h1:CnlE3P1i5fw6BPdZeGosSjgCQs1k4OgrJuoj76N2i5s=
-github.com/shahradelahi/wiresocks v0.0.0-20250815002029-d2ed70aae079/go.mod h1:VA5Kh0NKeizJUFXo8hw72mWTQmJNviRB1SrgTqquVNc=
 github.com/shahradelahi/wiresocks v0.0.0-20250819105937-eada7aea2058 h1:hNrh5t3t5AiQnmVKrWV5lHm5j9sABu8k8kBOrzpx5Y8=
 github.com/shahradelahi/wiresocks v0.0.0-20250819105937-eada7aea2058/go.mod h1:FV5GSSd5nMYkTEl1k7+jhRb1n+Ea/z25AGaxiEteyuE=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
