@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/netip"
+	"sync"
 	"time"
 
 	"go.uber.org/zap"
@@ -18,6 +19,8 @@ type IPScanner struct {
 	options statute.ScannerOptions
 	engine  *engine.Engine
 	ctx     context.Context
+	done    chan struct{}
+	mu      sync.RWMutex
 }
 
 func NewScanner(options ...Option) *IPScanner {
@@ -42,7 +45,8 @@ func NewScanner(options ...Option) *IPScanner {
 			IPQueueTTL:        30 * time.Second,
 			Cache:             c,
 		},
-		ctx: context.Background(),
+		ctx:  context.Background(),
+		done: make(chan struct{}),
 	}
 
 	for _, option := range options {
@@ -90,6 +94,14 @@ func WithMaxDesirableRTT(threshold time.Duration) Option {
 	}
 }
 
+// WithScannerPorts limits WARP handshake checks to the supplied UDP ports.
+// By default all known WARP ports are checked.
+func WithScannerPorts(ports ...uint16) Option {
+	return func(i *IPScanner) {
+		i.options.ScannerPorts = append([]uint16(nil), ports...)
+	}
+}
+
 func WithIPQueueTTL(ttl time.Duration) Option {
 	return func(i *IPScanner) {
 		i.options.IPQueueTTL = ttl
@@ -124,6 +136,7 @@ func WithCache(c *cache.Cache) Option {
 // cancel all operations
 
 func (i *IPScanner) Run() error {
+	defer close(i.done)
 	if !i.options.UseIPv4 && !i.options.UseIPv6 {
 		log.Fatal("Invalid configuration: Both IPv4 and IPv6 scanning are disabled. Please enable at least one to proceed.")
 		return nil
@@ -134,7 +147,9 @@ func (i *IPScanner) Run() error {
 		return errors.New("failed to create scanner engine")
 	}
 
+	i.mu.Lock()
 	i.engine = eng
+	i.mu.Unlock()
 	i.engine.Run()
 
 	if i.options.Cache != nil {
@@ -148,16 +163,25 @@ func (i *IPScanner) Run() error {
 }
 
 func (i *IPScanner) Stop() {
+	i.mu.RLock()
+	defer i.mu.RUnlock()
 	if i.engine != nil {
 		i.engine.Shutdown()
 	}
 }
 
 func (i *IPScanner) GetAvailableIPs() []statute.IPInfo {
+	i.mu.RLock()
+	defer i.mu.RUnlock()
 	if i.engine != nil {
 		return i.engine.GetAvailableIPs(false)
 	}
 	return nil
+}
+
+// Done is closed when Run exits.
+func (i *IPScanner) Done() <-chan struct{} {
+	return i.done
 }
 
 type IPInfo = statute.IPInfo

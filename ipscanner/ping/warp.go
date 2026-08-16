@@ -68,7 +68,10 @@ func (h *WarpPing) Ping() statute.IPingResult {
 }
 
 func (h *WarpPing) PingContext(ctx context.Context) statute.IPingResult {
-	ports := network.ScannerPorts()
+	ports := h.opts.ScannerPorts
+	if len(ports) == 0 {
+		ports = network.ScannerPorts()
+	}
 	results := make(chan statute.IPingResult, len(ports))
 	var wg sync.WaitGroup
 

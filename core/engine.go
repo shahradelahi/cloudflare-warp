@@ -72,8 +72,6 @@ func (e *Engine) Run() error {
 					return err
 				}
 			} else {
-				// connection successful, wait for context to be done
-				<-e.ctx.Done()
 				return nil
 			}
 		}
@@ -82,10 +80,14 @@ func (e *Engine) Run() error {
 
 func (e *Engine) getScannerEndpoints() ([]string, error) {
 	// make primary identity
-	ident, err := cloudflare.LoadOrCreateIdentity()
-	if err != nil {
-		log.Errorw("Failed to load/create primary identity", zap.Error(err))
-		return nil, err
+	ident := e.opts.Identity
+	if ident == nil {
+		var err error
+		ident, err = cloudflare.LoadOrCreateIdentity()
+		if err != nil {
+			log.Errorw("Failed to load/create primary identity", zap.Error(err))
+			return nil, err
+		}
 	}
 
 	// Reading the private key from the 'Interface' section
@@ -119,10 +121,14 @@ func (e *Engine) Stop() {
 
 func (e *Engine) runWarp(endpoint string) error {
 	// make primary identity
-	ident, err := cloudflare.LoadOrCreateIdentity()
-	if err != nil {
-		log.Errorw("Failed to load primary identity", zap.Error(err))
-		return err
+	ident := e.opts.Identity
+	if ident == nil {
+		var err error
+		ident, err = cloudflare.LoadOrCreateIdentity()
+		if err != nil {
+			log.Errorw("Failed to load primary identity", zap.Error(err))
+			return err
+		}
 	}
 
 	conf := GenerateWireguardConfig(ident)
@@ -148,9 +154,6 @@ func (e *Engine) runWarp(endpoint string) error {
 
 // startProxy starts the proxy servers and waits for the context to be done.
 func (e *Engine) startProxy(ctx context.Context, conf *wiresocks.Configuration, opts *wiresocks.ProxyConfig) error {
-	ctx, cancel := context.WithCancelCause(ctx)
-	defer cancel(nil)
-
 	ws, err := wiresocks.NewWireSocks(
 		wiresocks.WithContext(ctx),
 		wiresocks.WithWireguardConfig(conf),
@@ -160,13 +163,6 @@ func (e *Engine) startProxy(ctx context.Context, conf *wiresocks.Configuration, 
 		return err
 	}
 
-	go func() {
-		if err := ws.Run(); err != nil {
-			log.Errorw("Failed to to start proxy server", zap.Error(err))
-			cancel(err)
-		}
-	}()
-
 	if opts.SocksBindAddr != nil {
 		log.Infow("Serving Socks5 proxy", zap.Stringer("addr", opts.SocksBindAddr))
 	}
@@ -174,6 +170,9 @@ func (e *Engine) startProxy(ctx context.Context, conf *wiresocks.Configuration, 
 		log.Infow("Serving HTTP proxy", zap.Stringer("addr", opts.HttpBindAddr))
 	}
 
-	<-ctx.Done()
+	if err := ws.Run(); err != nil {
+		log.Errorw("Failed to start proxy server", zap.Error(err))
+		return err
+	}
 	return nil
 }

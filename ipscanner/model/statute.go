@@ -27,6 +27,7 @@ type ScannerOptions struct {
 	IPQueueSize       int
 	IPQueueTTL        time.Duration
 	MaxDesirableRTT   time.Duration
+	ScannerPorts      []uint16
 	EventsHandler     EndpointEventHandler
 	Cache             *cache.Cache
 	Obfuscation       bool

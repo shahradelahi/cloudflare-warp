@@ -223,6 +223,82 @@ These files are automatically managed by the `warp` commands (e.g., `generate`, 
 
 The project is in active development, and performance is a continuous focus. While the official client leverages highly optimized implementations, `cloudflare-warp` aims to provide a robust user-space solution. Performance can vary based on network conditions and system resources.
 
+## Go SDK
+
+Package `sdk` embeds WARP proxies in another Go application. One client loads or
+creates the WARP identity once; each proxy gets an independent userspace tunnel,
+local port, and remote WARP endpoint IP.
+
+```go
+package main
+
+import (
+	"context"
+	"log"
+	"net/netip"
+	"time"
+
+	warpsdk "github.com/shahradelahi/cloudflare-warp/sdk"
+)
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Loads an existing identity or generates reg.json/conf.json here.
+	client, err := warpsdk.GenerateIdentity("/var/lib/my-app/warp")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	endpoints, err := client.Scan(ctx, warpsdk.ScanOptions{
+		IPv4:   true,
+		Limit:  2,
+		MaxRTT: 500 * time.Millisecond,
+		Timeout: time.Minute,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	proxies := make([]*warpsdk.Proxy, 0, len(endpoints))
+	for i, endpoint := range endpoints {
+		proxy, err := client.NewProxy(ctx, warpsdk.ProxyConfig{
+			ListenIP:   netip.MustParseAddr("127.0.0.1"),
+			Port:       uint16(1080 + i),
+			EndpointIP: endpoint.AddrPort.Addr(),
+			EndpointPort: endpoint.AddrPort.Port(),
+			// Protocol defaults to warpsdk.SOCKS5.
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		if err := proxy.Start(); err != nil {
+			log.Fatal(err)
+		}
+		proxies = append(proxies, proxy)
+	}
+
+	<-ctx.Done()
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownCancel()
+	for _, proxy := range proxies {
+		if err := proxy.Shutdown(shutdownCtx); err != nil {
+			log.Printf("proxy shutdown: %v", err)
+		}
+	}
+}
+```
+
+`Scan` performs real WARP WireGuard handshakes and returns endpoints ordered by
+RTT. `CheckEndpoint` checks one exact `netip.AddrPort`. `Start` is asynchronous;
+use `Wait` or `WaitContext` to receive startup/runtime errors. `Shutdown` stops
+one proxy and waits for its listener and tunnel. Use `Run` when a blocking call
+is more convenient. Set `Protocol` to
+`warpsdk.HTTP` for an HTTP CONNECT proxy. By default listeners bind only to
+`127.0.0.1`; exposing a proxy via `0.0.0.0` or `::` should be done only with
+appropriate network access controls.
+
 ## 💬 Community
 
 Welcome and feel free to ask any questions at [Discussions](https://github.com/shahradelahi/cloudflare-warp/discussions).
